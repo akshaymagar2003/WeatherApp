@@ -19,6 +19,9 @@ class MainActivity : AppCompatActivity() {
 
         if(!isLocationEnabled()){
             Toast.makeText(this,"Your location Provider is turn off  Please turn it on",Toast.LENGTH_LONG).show()
+
+            val intent=Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+            startActivity(intent)
         }
         else{
             Toast.makeText(this,"Your location Provider is Already ON",Toast.LENGTH_LONG).show()
