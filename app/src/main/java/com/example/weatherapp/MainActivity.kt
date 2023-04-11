@@ -47,8 +47,7 @@ class MainActivity : AppCompatActivity() {
                 .withListener(object : MultiplePermissionsListener {
                     override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
                         if (report!!.areAllPermissionsGranted()) {
-                            // TODO (STEP 7: Call the location request function here.)
-                            // START
+
                             requestLocationData()
                             // END
                         }
