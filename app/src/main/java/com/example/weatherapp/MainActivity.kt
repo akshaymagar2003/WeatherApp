@@ -15,11 +15,14 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.location.*
+import com.google.gson.Gson
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
+import retrofit2.*
+import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity() {
     // A fused location client variable which is further used to get the user's current location
@@ -126,7 +129,11 @@ class MainActivity : AppCompatActivity() {
     }
     private fun getLocationWeatherDetails(){
         if(Constants.isNetworkAvailable(this)){
-            Toast.makeText(this@MainActivity,"You have connected to the internet.Now you can make an call",Toast.LENGTH_SHORT).show()
+
+val retorfit :Retrofit= Retrofit.Builder()
+                 .baseUrl(Constants.Base_URL)
+    .addConverterFactory(GsonConverterFactory.create()).build()
+
         }else{
             Toast.makeText(this@MainActivity,"No internet connection available ",Toast.LENGTH_SHORT).show()
         }
