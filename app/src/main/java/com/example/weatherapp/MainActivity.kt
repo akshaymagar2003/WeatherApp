@@ -14,6 +14,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.example.weatherapp.Networks.WeatherService
 import com.google.android.gms.location.*
 import com.google.gson.Gson
 import com.karumi.dexter.Dexter
@@ -130,9 +131,11 @@ class MainActivity : AppCompatActivity() {
     private fun getLocationWeatherDetails(){
         if(Constants.isNetworkAvailable(this)){
 
-val retorfit :Retrofit= Retrofit.Builder()
+val retrofit :Retrofit= Retrofit.Builder()
                  .baseUrl(Constants.Base_URL)
     .addConverterFactory(GsonConverterFactory.create()).build()
+
+            val service:WeatherService=retrofit.create< WeatherService>(WeatherService::class.java)
 
         }else{
             Toast.makeText(this@MainActivity,"No internet connection available ",Toast.LENGTH_SHORT).show()
