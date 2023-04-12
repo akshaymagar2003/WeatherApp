@@ -1,6 +1,7 @@
 package com.example.weatherapp
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
@@ -28,7 +29,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class MainActivity : AppCompatActivity() {
     // A fused location client variable which is further used to get the user's current location
     private lateinit var mFusedLocationClient: FusedLocationProviderClient
-
+  private var mprogressDialog: Dialog?=null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -142,12 +143,15 @@ val retrofit :Retrofit= Retrofit.Builder()
             val service:WeatherService=retrofit.create< WeatherService>(WeatherService::class.java)
         val listCall:Call<WeatherResponse> =service.getWeather(latitude,longitude,Constants.Matric_unit,Constants.appID)
 
+ showCustomProgressDialog()
+
         listCall.enqueue(object:Callback<WeatherResponse>{
             override fun onResponse(
                 call: Call<WeatherResponse>,
                 response: Response<WeatherResponse>
             ) {
                if(response!!.isSuccessful){
+                   hideProgessDialog()
                    val weatherList: WeatherResponse? =response.body()
                    Log.i("Response Result","$weatherList")
 
@@ -184,4 +188,15 @@ val retrofit :Retrofit= Retrofit.Builder()
             Toast.makeText(this@MainActivity,"No internet connection available ",Toast.LENGTH_SHORT).show()
         }
     }
+
+private fun showCustomProgressDialog(){
+    mprogressDialog=Dialog(this)
+    mprogressDialog!!.setContentView(R.layout.custom_dialog_progressbar)
+mprogressDialog!!.show()
+}
+private fun  hideProgessDialog(){
+    if(mprogressDialog!=null){
+        mprogressDialog!!.dismiss()
+    }
+}
 }
