@@ -1,5 +1,4 @@
 package com.example.weatherapp
-
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.ActivityNotFoundException
@@ -12,6 +11,7 @@ import android.os.Bundle
 import android.os.Looper
 import android.provider.Settings
 import android.util.Log
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -30,6 +30,9 @@ class MainActivity : AppCompatActivity() {
     // A fused location client variable which is further used to get the user's current location
     private lateinit var mFusedLocationClient: FusedLocationProviderClient
   private var mprogressDialog: Dialog?=null
+    val tv_main: TextView? =null
+    val tv_main_description: TextView? =null
+    val tv_temp: TextView? =null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -199,4 +202,23 @@ private fun  hideProgessDialog(){
         mprogressDialog!!.dismiss()
     }
 }
+  private fun setUpUi(weatherList:WeatherResponse){
+         for(i in weatherList.weather.indices){
+   Log.i("Weather Name",weatherList.weather.toString())
+
+             tv_main?.text=weatherList.weather[i].main
+             tv_main_description?.text=weatherList.weather[i].description
+         tv_temp?.text=weatherList.main.temp.toString()+getUnit(application.resources.configuration.locales.toString())
+         }
+  }
+
+    private fun getUnit(value: String): String? {
+
+        var value ="°C"
+        if("US"==value||"LR"==value||"MM"==value){
+            value="°F"
+        }
+        return value
+    }
+
 }
