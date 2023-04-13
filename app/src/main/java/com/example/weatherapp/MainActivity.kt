@@ -25,6 +25,8 @@ import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
+import java.text.SimpleDateFormat
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
     // A fused location client variable which is further used to get the user's current location
@@ -32,12 +34,14 @@ class MainActivity : AppCompatActivity() {
   private var mprogressDialog: Dialog?=null
     val tv_main: TextView? =null
     val tv_main_description: TextView? =null
+    val tv_sunset_time: TextView? =null
+    val tv_sunrise_time:TextView?=null
     val tv_temp: TextView? =null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Initialize the Fused location variable
+        // Initialize the Fused location variable`
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         if(!isLocationEnabled()){
@@ -209,6 +213,8 @@ private fun  hideProgessDialog(){
              tv_main?.text=weatherList.weather[i].main
              tv_main_description?.text=weatherList.weather[i].description
          tv_temp?.text=weatherList.main.temp.toString()+getUnit(application.resources.configuration.locales.toString())
+        tv_sunrise_time?.text= unixTime(weatherList.sys.sunrise)
+        tv_sunset_time?.text= unixTime(weatherList.sys.sunset)
          }
   }
 
@@ -219,6 +225,13 @@ private fun  hideProgessDialog(){
             value="°F"
         }
         return value
+    }
+
+    private fun unixTime(timex:Long):String?{
+     val date= Date(timex *1000L)
+        val sdf=SimpleDateFormat("HH:mm",Locale.UK)
+        sdf.timeZone= TimeZone.getDefault()
+        return sdf.format(date)
     }
 
 }
