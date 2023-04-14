@@ -1,20 +1,22 @@
 package com.example.weatherapp.Networks
 
-import com.example.weatherapp.models.WeatherResponse
-import retrofit2.Call
-import retrofit2.http.GET
-import retrofit2.http.Query
 
+
+import com.example.weatherapp.models.WeatherResponse
+import retrofit.Call
+import retrofit.http.GET
+import retrofit.http.Query
+
+/**
+ * An Interface which defines the HTTP operations Functions.
+ */
 interface WeatherService {
 
     @GET("2.5/weather")
     fun getWeather(
-        @Query("lat") lat:Double,
-      @Query("lon") lon:Double,
-        @Query("units") units:String,
-        @Query("appID") appID:String
+        @Query("lat") lat: Double,
+        @Query("lon") lon: Double,
+        @Query("units") units: String?,
+        @Query("appid") appid: String?
     ): Call<WeatherResponse>
-
-
-
 }
