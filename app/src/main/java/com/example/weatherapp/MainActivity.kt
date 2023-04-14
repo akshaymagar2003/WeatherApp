@@ -35,10 +35,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 // OpenWeather Link : https://openweathermap.org/api
-/**
- * The useful link or some more explanation for this app you can checkout this link :
- * https://medium.com/@sasude9/basic-android-weather-app-6a7c0855caf4
- */
+
 class MainActivity : AppCompatActivity() {
     lateinit var binding:ActivityMainBinding
     // A fused location client variable which is further user to get the user's current location
@@ -97,9 +94,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    /**
-     * A function which is used to verify that the location or GPS is enable or not of the user's device.
-     */
+
     private fun isLocationEnabled(): Boolean {
 
         // This provides access to the system location services.
@@ -110,9 +105,7 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
-    /**
-     * A function used to show the alert dialog when the permissions are denied and need to allow it from settings app info.
-     */
+
     private fun showRationalDialogForPermissions() {
         AlertDialog.Builder(this)
             .setMessage("It Looks like you have turned off permissions required for this feature. It can be enabled under Application Settings")
@@ -134,9 +127,6 @@ class MainActivity : AppCompatActivity() {
             }.show()
     }
 
-    /**
-     * A function to request the current location. Using the fused location provider client.
-     */
     @SuppressLint("MissingPermission")
     private fun requestLocationData() {
 
@@ -150,9 +140,7 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
-    /**
-     * A location callback object of fused location provider client where we will get the current location details.
-     */
+
     private val mLocationCallback = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult) {
             val mLastLocation: Location? = locationResult.lastLocation
@@ -170,39 +158,24 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    /**
-     * Function is used to get the weather details of the current location based on the latitude longitude
-     */
+
     private fun getLocationWeatherDetails(latitude: Double, longitude: Double) {
 
         if (Constants.isNetworkAvailable(this@MainActivity)) {
 
-            /**
-             * Add the built-in converter factory first. This prevents overriding its
-             * behavior but also ensures correct behavior when using converters that consume all types.
-             */
             val retrofit: Retrofit = Retrofit.Builder()
                 // API base URL.
                 .baseUrl(Constants.BASE_URL)
-                /** Add converter factory for serialization and deserialization of objects. */
-                /**
-                 * Create an instance using a default {@link Gson} instance for conversion. Encoding to JSON and
-                 * decoding from JSON (when no charset is specified by a header) will use UTF-8.
-                 */
+
                 .addConverterFactory(GsonConverterFactory.create())
-                /** Create the Retrofit instances. */
+
                 .build()
 
-            /**
-             * Here we map the service interface in which we declares the end point and the API type
-             *i.e GET, POST and so on along with the request parameter which are required.
-             */
+
             val service: WeatherService =
                 retrofit.create<WeatherService>(WeatherService::class.java)
 
-            /** An invocation of a Retrofit method that sends a request to a web-server and returns a response.
-             * Here we pass the required param in the service
-             */
+
             val listCall: Call<WeatherResponse> = service.getWeather(
                 latitude, longitude, Constants.METRIC_UNIT, Constants.APP_ID
             )
@@ -227,8 +200,7 @@ class MainActivity : AppCompatActivity() {
                         val weatherList: WeatherResponse = response.body()
                         Log.i("Response Result", "$weatherList")
 
-                        // TODO (STEP 6: Call the setup UI method here and pass the response object as a parameter to it to get the individual values.)
-                        // START
+
                         setupUI(weatherList)
                         // END
                     } else {
@@ -262,9 +234,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    /**
-     * Method is used to show the Custom Progress Dialog.
-     */
+
     private fun showCustomProgressDialog() {
         mProgressDialog = Dialog(this)
 
@@ -276,19 +246,13 @@ class MainActivity : AppCompatActivity() {
         mProgressDialog!!.show()
     }
 
-    /**
-     * This function is used to dismiss the progress dialog if it is visible to user.
-     */
     private fun hideProgressDialog() {
         if (mProgressDialog != null) {
             mProgressDialog!!.dismiss()
         }
     }
 
-    // TODO (STEP 5: We have set the values to the UI and also added some required methods for Unit and Time below.)
-    /**
-     * Function is used to set the result in the UI elements.
-     */
+
     @RequiresApi(Build.VERSION_CODES.N)
     private fun setupUI(weatherList: WeatherResponse) {
 
@@ -315,9 +279,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    /**
-     * Function is used to get the temperature unit value.
-     */
+
     private fun getUnit(value: String): String? {
         Log.i("unitttttt", value)
         var value = "°C"
@@ -327,9 +289,7 @@ class MainActivity : AppCompatActivity() {
         return value
     }
 
-    /**
-     * The function is used to get the formatted time based on the Format and the LOCALE we pass to it.
-     */
+
     private fun unixTime(timex: Long): String? {
         val date = Date(timex * 1000L)
         @SuppressLint("SimpleDateFormat") val sdf =
