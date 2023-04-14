@@ -25,6 +25,7 @@ import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
+
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -32,7 +33,7 @@ class MainActivity : AppCompatActivity() {
     // A fused location client variable which is further used to get the user's current location
     private lateinit var mFusedLocationClient: FusedLocationProviderClient
   private var mprogressDialog: Dialog?=null
-    val tv_main: TextView? =null
+    var tv_main: TextView? =null
     val tv_main_description: TextView? =null
     val tv_sunset_time: TextView? =null
     val tv_sunrise_time:TextView?=null
@@ -209,7 +210,7 @@ private fun  hideProgessDialog(){
   private fun setUpUi(weatherList:WeatherResponse){
          for(i in weatherList.weather.indices){
    Log.i("Weather Name",weatherList.weather.toString())
-
+tv_main=findViewById(R.id.tv_main)
              tv_main?.text=weatherList.weather[i].main
              tv_main_description?.text=weatherList.weather[i].description
          tv_temp?.text=weatherList.main.temp.toString()+getUnit(application.resources.configuration.locales.toString())
