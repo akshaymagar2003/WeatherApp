@@ -6,6 +6,7 @@ import android.app.Dialog
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.location.Location
 import android.location.LocationManager
 import android.net.Uri
@@ -25,6 +26,7 @@ import com.example.weatherapp.Networks.WeatherService
 import com.example.weatherapp.databinding.ActivityMainBinding
 import com.example.weatherapp.models.WeatherResponse
 import com.google.android.gms.location.*
+import com.google.gson.Gson
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -40,7 +42,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var binding:ActivityMainBinding
     // A fused location client variable which is further user to get the user's current location
     private lateinit var mFusedLocationClient: FusedLocationProviderClient
-
+   private lateinit var mSharedPreferences: SharedPreferences
     // A global variable for Progress Dialog
     private var mProgressDialog: Dialog? = null
 
@@ -51,7 +53,7 @@ class MainActivity : AppCompatActivity() {
 
         // Initialize the Fused location variable
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-
+  mSharedPreferences=getSharedPreferences(Constants.PREFERENCE_NAME,Context.MODE_PRIVATE)
         if (!isLocationEnabled()) {
             Toast.makeText(
                 this,
@@ -180,9 +182,9 @@ class MainActivity : AppCompatActivity() {
                 latitude, longitude, Constants.METRIC_UNIT, Constants.APP_ID
             )
 
-            showCustomProgressDialog() // Used to show the progress dialog
+            showCustomProgressDialog()
 
-            // Callback methods are executed using the Retrofit callback executor.
+
             listCall.enqueue(object : Callback<WeatherResponse> {
                 @RequiresApi(Build.VERSION_CODES.N)
                 @SuppressLint("SetTextI18n")
@@ -191,18 +193,20 @@ class MainActivity : AppCompatActivity() {
                     retrofit: Retrofit
                 ) {
 
-                    // Check weather the response is success or not.
+
                     if (response.isSuccess) {
 
                         hideProgressDialog() // Hides the progress dialog
 
-                        /** The de-serialized response body of a successful response. */
                         val weatherList: WeatherResponse = response.body()
                         Log.i("Response Result", "$weatherList")
 
+                       val weatherResponseJsonString= Gson().toJson(weatherList)
+                        val editor=mSharedPreferences.edit()
+                        editor.putString(Constants.WEATHER_RESPONSE_DATA,weatherResponseJsonString)
+                        editor.apply()
+                        setupUI()
 
-                        setupUI(weatherList)
-                        // END
                     } else {
                         // If the response is not success then we check the response code.
                         val sc = response.code()
