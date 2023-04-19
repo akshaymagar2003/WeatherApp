@@ -1,5 +1,7 @@
 package com.example.weatherapp.models
 
+import java.io.Serializable
+
 data class WeatherResponse(
     val base: String,
     val clouds: Clouds,
@@ -15,7 +17,7 @@ data class WeatherResponse(
     val visibility: Int,
     val weather: List<Weather>,
     val wind: Wind
-)
+) : Serializable
 
 
 // Json for creating data class;
