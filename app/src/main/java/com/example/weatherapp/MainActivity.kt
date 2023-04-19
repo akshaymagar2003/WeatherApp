@@ -15,7 +15,7 @@ import android.os.Looper
 import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
-import android.widget.TextView
+import android.view.Menu
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
@@ -29,7 +29,6 @@ import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
-
 import retrofit.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -246,6 +245,11 @@ class MainActivity : AppCompatActivity() {
         mProgressDialog!!.show()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_main,menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
     private fun hideProgressDialog() {
         if (mProgressDialog != null) {
             mProgressDialog!!.dismiss()
@@ -273,7 +277,6 @@ class MainActivity : AppCompatActivity() {
             binding.tvCountry.text = weatherList.sys.country
             binding.tvSunriseTime.text = unixTime(weatherList.sys.sunrise.toLong())
           binding.tvSunsetTime.text = unixTime(weatherList.sys.sunset.toLong())
-
             when (weatherList.weather[z].icon) {
                 "01d" -> binding.ivMain.setImageResource(R.drawable.sunny)
                 "02d" -> binding.ivMain.setImageResource(R.drawable.cloud)
