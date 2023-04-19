@@ -16,6 +16,7 @@ import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
@@ -250,6 +251,15 @@ class MainActivity : AppCompatActivity() {
         return super.onCreateOptionsMenu(menu)
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return  when(item.itemId){
+            R.id.actionrefresh->{
+                requestLocationData()
+                true
+            }else-> super.onOptionsItemSelected(item)
+        }
+
+    }
     private fun hideProgressDialog() {
         if (mProgressDialog != null) {
             mProgressDialog!!.dismiss()
@@ -277,7 +287,7 @@ class MainActivity : AppCompatActivity() {
             binding.tvCountry.text = weatherList.sys.country
             binding.tvSunriseTime.text = unixTime(weatherList.sys.sunrise.toLong())
           binding.tvSunsetTime.text = unixTime(weatherList.sys.sunset.toLong())
-            when (weatherList.weather[z].icon) {
+                 when (weatherList.weather[z].icon) {
                 "01d" -> binding.ivMain.setImageResource(R.drawable.sunny)
                 "02d" -> binding.ivMain.setImageResource(R.drawable.cloud)
                 "03d" -> binding.ivMain.setImageResource(R.drawable.cloud)
